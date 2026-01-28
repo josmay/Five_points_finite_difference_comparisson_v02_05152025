@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Varona Santana
+    given-names: Jose Luis
+    orcid: https://orcid.org/0009-0007-2850-500X
+title: "Five points finite difference operator applied to wave prospection model"
+version: 2.0.4
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.1234
+date-released: 2021-08-11
+
