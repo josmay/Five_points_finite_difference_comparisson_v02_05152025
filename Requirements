@@ -1,0 +1,52 @@
+
+---
+
+## Requirements
+
+The code was developed and tested using:
+
+- Python ≥ 3.9
+- NumPy
+- SciPy
+- Matplotlib (for reproducing figures)
+
+---
+
+## Reproducibility
+
+All numerical experiments shown in the paper that involve:
+
+- derivative accuracy comparisons
+- forward model validation
+- stability assessments
+
+can be reproduced using the scripts in the `examples/` directory.
+
+Numerical parameters (grid spacing, time step, domain size) are chosen consistently with the values reported in the manuscript.
+
+---
+
+## Relation to the Article
+
+This repository corresponds to the **supplementary numerical material** referenced in:
+
+- Section *[X]*: Numerical Scheme
+- Section *[Y]*: Forward Model
+- Appendix *[Z]* (if applicable)
+
+The five-point operator implemented here is the same operator denoted by  
+\( \boldsymbol{D}_5 \) in the paper.
+
+---
+
+## Citation
+
+If you use this code, please cite the associated article:
+
+```bibtex
+@article{YourArticleKey,
+  title   = {Title of your article},
+  author  = {Author list},
+  journal = {Journal Name},
+  year    = {Year}
+}
