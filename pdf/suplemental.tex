@@ -1,0 +1,63 @@
+\documentclass[onecolumn,1.5p]{elsarticle}
+
+% \usepackage{lineno}
+% \linenumbers
+
+\usepackage{tikz,amsfonts,amssymb,amsmath,algorithm,algpseudocode,subcaption}
+\usepackage{setspace}
+% Algorithms
+% \usepackage{algorithm,algpseudocode,subcaption}
+% \usepackage{algpseudocode,subcaption}
+
+% \usepackage{subcaption}  % Use subcaption, not subfig
+
+% \jorunal{Applied Mathematics and Computation}
+\begin{document}
+\onehalfspacing
+\begin{frontmatter}
+\title{Suplemental Material:\\Greedy Stein Variational Gradient Descent: An algorithmic approach for wave prospection problems\\[0.5ex]
+\large Supplemental Material}
+
+\author{José L. Varona-Santana\thanks{Corresponding author}}
+\ead{jose.varona@cimat.mx}
+\affiliation[1]{organization={Centro de Investigación en Matemáticas A.C},
+    addressline={ De Jalisco s/n, Valenciana},
+    postcode={36023 MX},
+    city={Guanajuato},
+    country={México}}
+
+\cortext[cor1]{José L. Varona-Santana}
+
+\author{Marcos A. Capistr\'an}
+\ead{marcos@cimat.mx}
+\affiliation[1]{organization={Centro de Investigación en Matemáticas A.C},
+    addressline={ Parque Científico y Tecnológico de Yucatán
+    Km 5.5 Carretera Sierra Papaca},
+    postcode={97302 MX},
+    city={Yucatán},
+    country={México}}
+
+\begin{keyword}
+    gradient descent \sep learning coefficient \sep bayesian model \sep surrogate model \sep full wave inversion \sep SVGD \sep G-SVGD
+\end{keyword}
+
+\end{frontmatter}
+
+\input{fivepointoperator.tex}
+\input{waveequation.tex}
+% \clearpage
+% \input{theoretical_framework}
+% \clearpage
+% \input{results}
+% \clearpage
+% \input{discussion.tex}
+% \input{others.tex}
+% \clearpage
+% 
+
+% \nocite{*}
+% \bibliographystyle{elsarticle-harv}
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}

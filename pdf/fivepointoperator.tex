@@ -1,0 +1,192 @@
+
+\section{The five points finite differences operator}
+
+
+The finite difference method is a numerical approach for solving differential equations by approximating the derivatives of the functions within the system. The numerical accuracy of this method, particularly when applied to wave and transport equations, has been well-documented and demonstrated by several authors \cite{quarteroni2006numerical,quarteroni2008numerical,langtangen2016finite,igel2017computational}. These studies highlight the effectiveness of the finite difference method in approximating numerical solutions to partial differential equations. This method is widely used in computational seismology, where it is often implemented as a \textit{five-point operator} to approximate the spatial derivative.
+
+Applying this numerical approach to solve the wave equation involves two key considerations. The first is the Courant number, also known as the Courant-Friedrichs-Lewy (CFL) condition. This number is used to establish the relationship between temporal and spatial resolutions to ensure numerical stability in the system's solution. Once the CFL condition is satisfied, it is crucial to determine the spatial resolution to ensure the accuracy of the approximation.
+
+Traditional approaches in the finite difference method include the centered difference and backward difference methods. Both are third-order approximations of the derivative of a function based on Taylor's polynomial expansion.
+
+Let 
+\[
+\boldsymbol{\alpha}_{i} = \begin{pmatrix} \alpha_1^{i} \\ \alpha_2^{i} \\ \alpha_3^{i} \\ \alpha_4^{i} \\ \alpha_5^{i} \end{pmatrix}, 
+\]
+a column vector of real coefficients, and
+\[
+\boldsymbol{T}_{i} = \begin{pmatrix} T^{4}_{i-2} \\ T^{4}_{i-1} \\ T^{4}_{i} \\ T^{4}_{i+1} \\ T^{4}_{i+2} \end{pmatrix},
+\]
+a column vector, where each component represents the 4th-degree Taylor polynomial center at \( x_i \) and evaluated in \(x_j\).
+The \( n \)-order derivative and the coefficient values for the five-point operator are obtained from the Taylor polynomial using the following relation:
+\begin{equation}
+\frac{\partial^n f\left(x_i\right)}{\partial x^n} = \boldsymbol{\alpha}_{i}^\top \boldsymbol{T}_i + R_i\left(\boldsymbol{\alpha}, \Delta x, f^{\left(5\right)}\right),
+\end{equation}
+where the error in the approximation, using the Lagrange version of the remainder, is given by:
+\begin{equation}
+    \left| \frac{\partial^n f\left(x_i\right)}{\partial x^n} - \boldsymbol{\alpha}^\top \boldsymbol{T}_i \right| = \left| R\left(\boldsymbol{\alpha}, \Delta x, f^{\left(5\right)}\right) \right| \leq \frac{\left| f^{\left(5\right)}\left(c\right) \right| \left( 2\Delta x \right)^{5}}{5!} \left( \left| \alpha_1 \right| + \left| \alpha_2 \right| + \left| \alpha_4 \right| + \left| \alpha_5 \right| \right)
+\label{eq:error5}    
+\end{equation}
+where \( c \in \left[ x_{i-2},x_{i+2} \right]\) is a point within the interval of approximation.
+If \(\varepsilon\) is the desired error in the approximation, then the spatial step size \(\Delta x\) must satisfy:
+\[
+\Delta x \leq \frac{1}{2} \sqrt[5]{\frac{120\varepsilon}{\left| f^{\left(5\right)}\left(c\right) \right| \left( \left| \alpha_1 \right| + \left| \alpha_2 \right| + \left| \alpha_4 \right| + \left| \alpha_5 \right| \right)}}.
+\]
+
+Consequently, the associated system of equations is given by:
+
+\begin{equation}
+    \mathbf{A}\left(\phi_i\right) \boldsymbol{\alpha} = \mathbf{f}^{(n)} \approx \frac{\partial^n f\left(x_i\right)}{\partial x^n} 
+    \label{eq:5po_discrete_system}
+\end{equation}
+where the system matrix, \( \mathbf{A} \), depends on the stencil \( \phi_i \) used for the approximation, which in turn depends on the node's position within the discretized domain. The vector \( \mathbf{f}^{(n)} \) represents the \( n \)-th derivative to be approximated. The maximum order of the derivative that can be approximated is equal to the stencil size, as determined by the formulation of the system of equations using the Taylor polynomial expansion on the selected stencil.
+
+In our work, we identified five fundamental stencils and the associated systems of equations.
+
+\begin{enumerate}
+
+    \item  $\phi_0=\left[x_{0},x_{1},x_{2},x_{3},x_{4}\right]$
+    This corresponds to the node \( x_0 \) located at the left boundary.
+
+\begin{equation}
+            % i & i+1 & i+2 & i+3 & i+4 \\ \hline
+        \begin{pmatrix}
+            1&1&1&1&1 \\
+            0&1&2&3&4 \\
+            0&1&4&9&16 \\
+            0&1&8&27&64 \\
+            0&1&16&81&256 
+        \end{pmatrix}
+        \boldsymbol{\alpha}_{0}
+        =
+        \begin{pmatrix}
+            0&0&0&0\\
+            \frac{1}{dx}& 0&0&0\\
+            0& \frac{2!}{dx^2}&0&0 \\
+            0 &0& \frac{3!}{dx^3}&0 \\
+            0 &0&0&\frac{4!}{dx^4}
+        \end{pmatrix}
+\end{equation}
+
+\item  $\phi_1=\left[x_{0},x_{1},x_{2},x_{3},x_{4}\right]$
+This corresponds to the node \( x_1 \).
+
+\begin{equation}
+            % i & i+1 & i+2 & i+3 & i+4 \\ \hline
+        \begin{pmatrix}
+            1   &1  &1  &1  &1 \\
+            -1  &0  &1  &2  &3 \\
+            1   &0  &1  &4  &9 \\
+            -1  &0  &1  &8 &27\\
+            1   &0  &1 &16 &81 
+        \end{pmatrix}
+        \boldsymbol{\alpha}_{1}
+        =
+        \begin{pmatrix}
+            0&0&0&0\\
+            \frac{1}{dx}& 0&0&0\\
+            0& \frac{2!}{dx^2}&0&0 \\
+            0 &0& \frac{3!}{dx^3}&0 \\
+            0 &0&0&\frac{4!}{dx^4}
+        \end{pmatrix}
+\end{equation}
+
+\item  $\phi_i=\left[x_{i-2},x_{i-1},x_{i},x_{i+1},x_{i+2}\right]$
+This corresponds to the node \( x_i \), associated with all central nodes.
+
+\begin{equation}
+    % i & i+1 & i+2 & i+3 & i+4 \\ \hline
+\begin{pmatrix}
+    1&1&1&1&1\\
+    -2&-1&0&1&2\\
+    4&1&0&1&4\\
+    -8&-1&0&1&8\\
+    16&1&0&1&16
+\end{pmatrix}
+\boldsymbol{\alpha}_{i}
+=
+\begin{pmatrix}
+    0&0&0&0\\
+    \frac{1}{dx}& 0&0&0\\
+    0& \frac{2!}{dx^2}&0&0 \\
+    0 &0& \frac{3!}{dx^3}&0 \\
+    0 &0&0&\frac{4!}{dx^4}
+\end{pmatrix}
+\end{equation}
+
+\item  $\phi_{N-1}=\left[x_{N-4},x_{N-3},x_{N-2},x_{N-1},x_{N}\right]$
+This corresponds to the node $x_{N-1}$.
+\begin{equation}
+            % i & i+1 & i+2 & i+3 & i+4 \\ \hline
+        \begin{pmatrix}
+            1&1&1&1&1\\
+            -3&-2&-1&0&1\\
+            9&4&1&0&1\\
+            -27&-8&-1&0&1\\
+            81&16&1&0&1
+        \end{pmatrix}
+        \boldsymbol{\alpha}_{N-1}
+        =
+        \begin{pmatrix}
+            0&0&0&0\\
+            \frac{1}{dx}& 0&0&0\\
+            0& \frac{2!}{dx^2}&0&0 \\
+            0 &0& \frac{3!}{dx^3}&0 \\
+            0 &0&0&\frac{4!}{dx^4}
+        \end{pmatrix}
+\end{equation}
+
+\item  $\phi_{N}=\left[x_{N-4},x_{N-3},x_{N-2},x_{N-1},x_{N}\right]$
+This corresponds to the node \( x_N \) located at the right boundary.
+
+\begin{equation}
+            % i & i+1 & i+2 & i+3 & i+4 \\ \hline
+        \begin{pmatrix}
+            1&1&1&1&1 \\
+            -4&-3&-2&-1&0 \\
+            16&9&4&1&0\\
+            -64&-27&-8&-1&0\\
+            256&81&16&1&0
+        \end{pmatrix}
+        \boldsymbol{\alpha}_{N}
+        =
+        \begin{pmatrix}
+            0&0&0&0\\
+            \frac{1}{dx}& 0&0&0\\
+            0& \frac{2!}{dx^2}&0&0 \\
+            0 &0& \frac{3!}{dx^3}&0 \\
+            0 &0&0&\frac{4!}{dx^4}
+        \end{pmatrix}
+        \label{eq:ecuaciones_5p}
+\end{equation}
+
+\end{enumerate}
+Each column of \( \mathbf{f}^{\left(n\right)} \) corresponds to a different derivative order, from \( n=1 \) to \( n=4 \).
+The error shown in the equation \eqref{eq:error5}, corresponds to the stencil $\phi_i$. For the remaining stencils we have the following remainders.
+
+\begin{flalign}
+    \left| R_{0}\left(\boldsymbol{\alpha}_{0}, \Delta x, f^{\left(5\right)}\right) \right| 
+        &\leq \frac{\left| f^{\left(5\right)}\left(c\right) \right| \left( 4\Delta x \right)^{5}}{5!} 
+        \left( \left| \alpha_{1}^{0} \right| + \left| \alpha_{2}^{0} \right| + \left| \alpha_{3}^{0} \right| + \left| \alpha_{4}^{0} \right| \right),\quad c\in \left[ x_0,x_4 \right]\\
+    \left| R_{1}\left(\boldsymbol{\alpha}_{1}, \Delta x, f^{\left(5\right)}\right) \right| 
+        &\leq \frac{\left| f^{\left(5\right)}\left(c\right) \right| \left( 3\Delta x \right)^{5}}{5!} 
+        \left( \left| \alpha_{0}^{1} \right| + \left| \alpha_{2}^{1} \right| + \left| \alpha_{3}^{1} \right| + \left| \alpha_{4}^{1} \right| \right) ,\quad c\in \left[ x_0,x_4 \right] \\
+    \left| R_{N-1}\left(\boldsymbol{\alpha}_{N-1}, \Delta x, f^{\left(5\right)}\right) \right| 
+        &\leq \frac{\left| f^{\left(5\right)}\left(c\right) \right| \left( 3\Delta x \right)^{5}}{5!} 
+        \left( \left| \alpha_{0}^{N-1} \right| + \left| \alpha_{1}^{N-1} \right| + \left| \alpha_{2}^{N-1} \right| + \left| \alpha_{4}^{N-1} \right| \right),\quad c\in \left[ x_{N-4},x_N \right]\\
+    \left| R_{N}\left(\boldsymbol{\alpha}_{N}, \Delta x, f^{\left(5\right)}\right) \right| 
+        &\leq \frac{\left| f^{\left(5\right)}\left(c\right) \right| \left( 4\Delta x \right)^{5}}{5!} 
+        \left( \left| \alpha_{0}^{N} \right| + \left| \alpha_{1}^{N} \right| + \left| \alpha_{2}^{N} \right| + \left| \alpha_{3}^{N} \right| \right),\quad c\in \left[ x_{N-4},x_N \right]
+\end{flalign}
+and the relation with the spatial resolution given the desire error in the approximation 
+%aqui van las ecuaciones para la resolucion espacial
+\begin{align}
+        \Delta x &\leq \frac{1}{4} \sqrt[5]{\frac{120\varepsilon}{\left| f^{\left(5\right)}\left(c\right) \right| 
+        \left( \left| \alpha_{1}^{0} \right| + \left| \alpha_{2}^{0} \right| + \left| \alpha_{3}^{0} \right| + \left| \alpha_{4}^{0} \right| \right)}}\\
+        \Delta x &\leq \frac{1}{3} \sqrt[5]{\frac{120\varepsilon}{\left| f^{\left(5\right)}\left(c\right) \right| 
+        \left( \left| \alpha_{0}^{1} \right| + \left| \alpha_{2}^{1} \right| + \left| \alpha_{3}^{1} \right| + \left| \alpha_{4}^{1} \right| \right)}}\\
+        \Delta x &\leq \frac{1}{3} \sqrt[5]{\frac{120\varepsilon}{\left| f^{\left(5\right)}\left(c\right) \right| 
+        \left( \left| \alpha_{0}^{N-1} \right| + \left| \alpha_{1}^{N-1} \right| + \left| \alpha_{2}^{N-1} \right| + \left| \alpha_{4}^{N-1} \right| \right)}}\\
+        \Delta x &\leq \frac{1}{4} \sqrt[5]{\frac{120\varepsilon}{\left| f^{\left(5\right)}\left(c\right) \right| 
+        \left( \left| \alpha_{0}^{N} \right| + \left| \alpha_{1}^{N} \right| + \left| \alpha_{2}^{N} \right| + \left| \alpha_{3}^{N} \right| \right)}}
+\end{align}
+The  challenge in determining the accuracy of the approximation based on the spatial numerical resolution lies in the 5th-order derivative of the function. This challenge arises because, in most cases, the form of the 5th derivative, or even the function itself, is unknown.

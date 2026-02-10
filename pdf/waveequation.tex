@@ -1,0 +1,76 @@
+
+\section{Wave equation}
+We use the wave equation to describe the velocity field of waves traveling within each of these layers. With the wave equation as our physical governing model, we construct two wave prospection models to describe the scenario of a static material perturbed by an external force. These external forces are modeled as waves entering the structure at each boundary and traveling uninterrupted out of it. By "uninterrupted," we mean that no additional forces or perturbations are present in the system other than those provided by the boundaries and the elastic tension of the materials. 
+
+For high-contrast scenarios, we assume that each homogeneous subregion is perturbed by two waves traveling in opposite directions, and the entire structure is treated as the continuous union of these subregions. This setup allows for the exploration of interactions between areas with differing compositions. Such exploration is essential to determine the reflection and transmission of waves traveling through the medium, as well as their propagation and amplitude. Similar approaches were developed by \citep{capistran2012full,capistran2020reliability}, where the region of interest was modeled as a composition of homogeneous layers.
+
+For low-contrast scenarios, we consider a single region perturbed by a wave entering from one boundary, while the wave travels uninterrupted out of the area of interest through the other boundary. This setup allows for the investigation of the behavior of traveling waves in a non-homogeneous region. In this case, careful consideration is required for the discrete approximation of the differential model. We adopted the \textit{Displacement} formulation of the 1D wave equation \citep{moczo1998introduction}, excluding the damping term for simplicity.
+
+\subsubsection{One-Dimensional Wave Equation in a Homogeneous Layer}\label{sub:high_contrast_medium}
+
+For a high-contrast stratified structure, we model a static layer perturbed by an external source, where the resulting disturbance propagates without interruption and exits through open boundaries. The displacement-based formulation for this scenario is:
+
+\begin{equation}
+    \begin{array}{rlrl}
+        \partial_{t}{2}{u_{r}} - v^2 \partial_{x}{2}{u_{r}} & = 0,                            & x \in (0, L), & t \in (0, T] \\
+        u_{r}(x, 0)                                         & = 0,                            & x \in [0, L]                \\
+        \partial_{t}{u_{r}}(x, 0)                           & = 0,                            & x \in [0, L]                \\
+        u_{r}(0, t)                                         & = F_{l}(t),                     & t > 0                      \\
+        \partial_{t}u_{r}(L, t)                             & = -v\partial_{x}u_{r}(L, t),    & t > 0
+    \end{array}
+    \label{eq:DF1DWE_ur}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{rlrl}
+        \partial_{t}{2}{u_{l}} - v^2 \partial_{x}{2}{u_{l}} & = 0,                            & x \in (0, L), & t \in (0, T] \\
+        u_{l}(x, 0)                                         & = 0,                            & x \in [0, L]                \\
+        \partial_{t}{u_{l}}(x, 0)                           & = 0,                            & x \in [0, L]                \\
+        \partial_{t}u_{l}(0, t)                             & = v\partial_{x}u_{l}(0, t),     & t > 0                      \\
+        u_{l}(L, t)                                         & = F_{r}(t),                     & t > 0
+    \end{array}
+    \label{eq:DF1DWE_ul}
+\end{equation}
+The equations \eqref{eq:DF1DWE_ur} and \eqref{eq:DF1DWE_ul} describe the same static structure perturbed by external forces \( F_l \) and \( F_r \). This system models two waves propagating in opposite directions within a homogeneous layer with absorbing boundaries. The first-order open boundary conditions, \( \partial_{t}u_{r}(L, t) + c\partial_{x}u_{r}(L, t) = 0 \) and \( \partial_{t}u_{l}(0, t) - c\partial_{x}u_{l}(0, t) = 0 \), are derived from the equations proposed in \citep{buckman2012onesided}. To model the wave behavior, we apply the superposition principle.
+
+\paragraph{Wave Superposition Principle}
+The principle of superposition states that when two or more waves propagate simultaneously through the same layer, the resulting displacement is the algebraic sum of the individual wave displacements \citep[section 16-5: Interference of waves]{halliday2013fundamentals}. 
+
+If \( u_l \) and \( u_r \) are the only waves present in the layer bounded by \(\left[ 0, L \right]\), the resulting wave is:
+\begin{equation}
+    u(x, t) = u_r(x, t) + u_l(x, t)
+    \label{eq:wave_solution_homogeneous}
+\end{equation}
+
+\subsubsection{One-Dimensional Wave Equation in Non-Homogeneous Layer}
+Our modeling scenario in this case is similar to the previous section, but now we consider a non-homogeneous layer. This means that the transverse velocity of the wave depends on space, which introduces modifications to the wave equation system. The system describing a wave perturbing a non-homogeneous static medium, with one open boundary and the other acting as a source, is given by:
+
+\begin{equation}
+    \begin{array}{rlrl}
+        \partial_{t}^{2}{u} - \partial_{x}\left( v^2\left( x \right)\partial_{x}u \right) & = 0,                            & x \in (0, L), & t \in (0, T] \\
+        u(x, 0)                                         & = 0,                            & x \in [0, L]                \\
+        \partial_{t}{u}(x, 0)                           & = 0,                            & x \in [0, L]                \\
+        \partial_{t}u(0, t)                             & = F_{l}(t),     & t > 0                      \\
+        u(L, t)                                         & = -c_{L}\partial_{x}u(0, t),                     & t > 0
+    \end{array}
+    \label{eq:DF1DWE_non-homogeneous}
+\end{equation}
+The wave equation is a hyberbolic partial differential equation that its sensitive to jumps on the velocity field. Meaning that the numerical solution for this system need to be treated carefully. 
+
+
+
+To solve the wave equation within the homogeneous layers, we transform the second-order partial differential systems \eqref{eq:DF1DWE_ur} and \eqref{eq:DF1DWE_ul} into a first-order  system.
+
+Let 
+\begin{equation}
+\boldsymbol{w} = \begin{bmatrix} u \\ \partial_t u \end{bmatrix}.
+\end{equation}
+Then the system is given by:
+
+\begin{equation}
+    \partial_t \boldsymbol{w} = \begin{pmatrix}
+        0 & 1 \\
+        v^2 \boldsymbol{L}_5\left( \cdot \right) & 0
+    \end{pmatrix} \boldsymbol{w} + \boldsymbol{F},
+\end{equation}
+where \(\boldsymbol{L}_5\) is the five-point second-order operator, and \(\boldsymbol{F}\) is the source term associated with each system.

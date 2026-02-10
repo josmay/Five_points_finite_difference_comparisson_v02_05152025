@@ -1,0 +1,51 @@
+\begin{thebibliography}{}
+
+\bibitem[Buckman et~al., 2012]{buckman2012onesided}
+Buckman, K., Sanchez-Vizuet, T., Stapf, M., and Qiu, T. (2012).
+\newblock One sided wave equations \& absorbing boundary conditions.
+\newblock Maroon Team.
+
+\bibitem[Capistran et~al., 2012]{capistran2012full}
+Capistran, M., Moreles, M.~A., and Pena, J. (2012).
+\newblock On full seismic waveform inversion by descent methods in a lattice.
+\newblock {\em Appl. Math}, 6(2):193--203.
+
+\bibitem[Capistran et~al., 2020]{capistran2020reliability}
+Capistran, M.~A., Chi~Vinh, P., and Thanh~Tuan, T. (2020).
+\newblock Reliability assessment and data inversion using a surrogate model of
+  wave propagation in functionally graded materials.
+\newblock {\em Inverse Problems in Science and Engineering}, 28(5):614--636.
+
+\bibitem[Halliday et~al., 2013]{halliday2013fundamentals}
+Halliday, D., Resnick, R., and Walker, J. (2013).
+\newblock {\em Fundamentals of physics}.
+\newblock John Wiley \& Sons.
+
+\bibitem[Igel, 2017]{igel2017computational}
+Igel, H. (2017).
+\newblock {\em Computational seismology: a practical introduction}.
+\newblock Oxford University Press.
+
+\bibitem[Langtangen and Linge, 2016]{langtangen2016finite}
+Langtangen, H.~P. and Linge, S. (2016).
+\newblock Finite difference methods for wave equations.
+\newblock {\em Journal of Numerical Methods}.
+
+\bibitem[Moczo, 1998]{moczo1998introduction}
+Moczo, P. (1998).
+\newblock {\em Introduction to Modeling Seismic Wave Propagation by the
+  Finite-Difference Methods}.
+\newblock Disaster Prevention Research Institute, Kyoto University.
+
+\bibitem[Quarteroni et~al., 2006]{quarteroni2006numerical}
+Quarteroni, A., Sacco, R., and Saleri, F. (2006).
+\newblock {\em Numerical mathematics}, volume~37.
+\newblock Springer Science \& Business Media.
+
+\bibitem[Quarteroni and Valli, 2008]{quarteroni2008numerical}
+Quarteroni, A. and Valli, A. (2008).
+\newblock {\em Numerical approximation of partial differential equations},
+  volume~23.
+\newblock Springer Science \& Business Media.
+
+\end{thebibliography}
