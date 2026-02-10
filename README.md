@@ -1,73 +1,130 @@
-# Five-Point Finite Difference Operator and Forward Wave Model  
-*Supplementary Material*
+# Overview
 
-## Overview
+This repository provides the supplementary numerical material for the article:
 
-This repository provides the **supplementary numerical material** for the article:
+Greedy Stein Variational Gradient Descent for Inverse Wave Propagation Problems
+Revista de Ingeniería de la UNAM, 2026
 
-> **[Title of your article]**  
-> *[Journal name, year]*
+# The repository is organized into two main components:
 
-It contains the Python implementation of:
+- Source Code
 
-- A **five-point finite difference operator** for high-order spatial derivatives
-- A **one-dimensional forward wave propagation solver**
-- Numerical tools used to evaluate and validate the methods presented in the paper
+- Supplementary Material (PDF)
 
-The code is intended to support **reproducibility**, **methodological transparency**, and **independent verification** of the numerical results discussed in the manuscript.
+This material supports the numerical experiments and methodological developments presented in the associated journal article.
 
----
+# Repository Structure
 
-## Scope of the Repository
 
-This repository focuses exclusively on the **numerical components** of the work:
+├── Source_Code/
+│ ├── cuda_modelo_directo_XX_open_boundary.py
+│ ├── cuda_soporte.py
+│ ├── FD_solucion_onda_XX.py
+│ ├── finite_difference_operators.py
+│ └── gpu_bSplines.py
+│
+├── Supplementary_Material/
+│ └── five_point_operator_derivation.pdf
+│
+└── README.md
 
-- Construction of the five-point finite difference operator \( \mathbf{D}_5 \)
-- Treatment of boundary stencils for first- through fourth-order derivatives
-- Forward modeling of the 1D wave equation used in the inverse problems
-- Comparison with classical finite difference schemes
+# Source Code
 
-All theoretical derivations, proofs, and statistical modeling are presented in the main article.  
-This repository **does not** include the inference algorithms or optimization routines discussed in the paper.
+The Source Code directory contains Python implementations for solving the wave prospection problem in stratified media.
 
----
+- cuda_modelo_directo_XX_open_boundary.py
+Implements the forward wave solver using CUDA-enabled GPUs and open boundary conditions.
 
-## Numerical Methods Implemented
+- cuda_soporte.py
+Provides auxiliary routines for numerical domain construction and GPU-based computations.
 
-### Five-Point Finite Difference Operator
+- FD_solucion_onda_XX.py
+Implements the forward wave model using different finite difference operators.
 
-The five-point operator is constructed by solving local linear systems derived from Taylor expansions.  
-Different stencils are used depending on the node location:
+- finite_difference_operators.py
+Constructs five-point finite difference operators for arbitrary spatial discretization steps.
 
-- Left boundary
-- Near-left boundary
-- Interior nodes
-- Near-right boundary
-- Right boundary
+- gpu_bSplines.py
+Implements β-spline parameterizations of the velocity field for low-contrast stratified media.
 
-Each stencil yields a vector of coefficients \( \boldsymbol{\alpha}_i \), which are assembled into a global sparse operator matrix.
+## Supplementary Material (PDF)
 
-This implementation supports derivatives of order:
+The Supplementary_Material directory contains a LaTeX-based document describing:
 
-\[
-n = 1, 2, 3, 4
-\]
+- The derivation of the five-point finite difference operator,
 
-and ensures consistent accuracy across the domain, including at the boundaries.
+- A detailed error analysis of the approximation,
 
----
+- The formulation of the forward wave propagation model.
 
-### Forward Wave Model
+This document complements the numerical results presented in the main article and provides full methodological transparency.
 
-The forward model solves the one-dimensional wave equation using:
+# Numerical Methods Implemented
 
-- Explicit time integration
-- Spatial discretization via the five-point operator
-- Open (absorbing) boundary conditions
+The forward wave model is solved using finite difference schemes combined with explicit time stepping, where the solution at time $𝑡_{𝑛+1} depends directly on the solution at time $t_{n}$.
 
-The solver is designed to match the forward operators used in the Bayesian inversion framework presented in the article.
+To accelerate computations—particularly when solving multiple independent models simultaneously—we leverage GPU acceleration using the CuPy library. CuPy mirrors NumPy syntax, allowing efficient GPU–CPU interoperability with minimal code changes.
 
----
+# Five-Point Finite Difference Operator
 
-## Repository Structure
+To assess the numerical behavior of the five-point finite difference operator, we first apply it to the approximation of derivatives of known analytical functions.
 
+We then incorporate the operator into the forward wave model and analyze the numerical behavior near domain boundaries. Since exact analytical solutions are generally unavailable at the boundaries, we use the standard deviation across multiple spatial resolutions as an error metric.
+
+As the spatial resolution increases, all finite difference solutions converge toward a common (unknown) limit. The standard deviation therefore provides a quantitative measure of the uncertainty associated with the numerical approximation.
+
+# How to Run the Code
+## Requirements
+
+- Python ≥ 3.9
+
+- NumPy
+
+- CuPy (for GPU execution)
+
+- CUDA-compatible GPU (optional but recommended)
+
+## Installation
+
+CPU-only dependencies:
+
+- pip install numpy
+
+GPU support (example for CUDA 12.x):
+
+- pip install cupy-cuda12x
+
+## Running a Forward Model
+
+GPU-based forward solver:
+
+- python cuda_modelo_directo_01_open_boundary.py
+
+CPU-based finite difference solver:
+
+- python FD_solucion_onda_01.py
+
+Model parameters (spatial resolution, time step, velocity model, etc.) are defined directly in each script and correspond to the configurations used in the associated article.
+
+## Reproducibility and Journal Compliance
+
+- All numerical solvers correspond exactly to those used in the published experiments.
+
+- No post-processing or parameter tuning was performed outside the scripts provided here.
+
+- The repository is intended for reproducibility, validation, and methodological transparency, in line with journal supplementary material standards.
+
+# Citation
+
+If you use this repository, please cite it as:
+
+BibTeX
+
+- @misc{VaronaSantana2025FivePointFD,
+author = {Varona Santana, Jose Luis},
+title = {Five-Point Finite Difference Operator and Forward Wave Model},
+year = {2025},
+howpublished = {https://github.com/josmay/Five_points_finite_difference_comparisson_v02_05152025}
+,
+note = {Supplementary numerical material for the associated journal article}
+}
